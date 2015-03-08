@@ -24,10 +24,10 @@ func TestCalculateThrottle(t *testing.T) {
 	for i, tst := range tt {
 		tm, err := calculateThrottle(tst.currentTime, tst.retryAfter)
 		if err != nil {
-			t.Fatalf("%[%d] Couldn't calculate retry after: %s", i, err.Error())
+			t.Fatalf("[%d] Couldn't calculate retry after: %s", i, err.Error())
 		}
 		if got, want := tm, tst.expectedTime; !got.Equal(want) {
-			t.Fatalf("%[%d] Got %s Expected %s", i, got, want)
+			t.Fatalf("[%d] Got %s Expected %s", i, got, want)
 		}
 	}
 }
