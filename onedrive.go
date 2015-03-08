@@ -50,29 +50,6 @@ func createRequestBody(body interface{}) (io.ReadWriter, error) {
 	return buf, nil
 }
 
-func (od *OneDrive) newRequest(method, uri string, body interface{}) (*http.Request, error) {
-	requestBody, err := createRequestBody(body)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(method, od.BaseURL+uri, requestBody)
-	if err != nil {
-		return nil, err
-	}
-
-	acceptHeader := "application/json"
-	if od.Debug {
-		acceptHeader += ";format=pretty"
-	}
-
-	req.Header.Add("Accept", acceptHeader)
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("User-Agent", userAgent)
-
-	return req, nil
-}
-
 func (od *OneDrive) do(req *http.Request, decodeInto interface{}) (*http.Response, error) {
 	resp, err := od.Client.Do(req)
 	if err != nil {
@@ -81,8 +58,8 @@ func (od *OneDrive) do(req *http.Request, decodeInto interface{}) (*http.Respons
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 && resp.StatusCode <= 507 {
-		var newErr Error
-		if err := json.NewDecoder(resp.Body).Decode(&newErr); err != nil {
+		newErr := new(Error)
+		if err := json.NewDecoder(resp.Body).Decode(newErr); err != nil {
 			return resp, err
 		}
 		return resp, newErr

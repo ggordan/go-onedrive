@@ -81,7 +81,7 @@ func (ds *DriveService) Get(driveID string) (*Drive, *http.Response, error) {
 		path = fmt.Sprintf("/drives/%s", driveID)
 	}
 
-	req, err := ds.newRequest("GET", path, nil)
+	req, err := ds.newRequest("GET", path, nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -108,7 +108,7 @@ func (ds *DriveService) GetRootDrive() (*Drive, *http.Response, error) {
 
 // List returns all the Drives available to the authenticated user
 func (ds *DriveService) List() (*Drives, *http.Response, error) {
-	req, err := ds.newRequest("GET", "/drives", nil)
+	req, err := ds.newRequest("GET", "/drives", nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -134,7 +134,7 @@ func (ds *DriveService) ListChildren(driveID string) (*Items, *http.Response, er
 		path = fmt.Sprintf("/drives/%s/root/children", driveID)
 	}
 
-	req, err := ds.newRequest("GET", path, nil)
+	req, err := ds.newRequest("GET", path, nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}

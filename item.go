@@ -85,7 +85,7 @@ type Item struct {
 func (is *ItemService) GetByID(itemID string) (*Item, *http.Response, error) {
 	path := fmt.Sprintf("/drive/items/%s", itemID)
 
-	req, err := is.newRequest("GET", path, nil)
+	req, err := is.newRequest("GET", path, nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -103,7 +103,7 @@ func (is *ItemService) GetByID(itemID string) (*Item, *http.Response, error) {
 func (is *ItemService) GetChildrenByID(itemID string) (*Items, *http.Response, error) {
 	path := fmt.Sprintf("/drive/items/%s/children", itemID)
 
-	req, err := is.newRequest("GET", path, nil)
+	req, err := is.newRequest("GET", path, nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -130,7 +130,7 @@ func (is *ItemService) CreateFolder(parentID, folderName string) (*Item, *http.R
 	}
 
 	path := fmt.Sprintf("/drive/items/%s/children/%s", parentID, folderName)
-	req, err := is.newRequest("PUT", path, folder)
+	req, err := is.newRequest("PUT", path, nil, folder)
 	if err != nil {
 		return nil, nil, err
 	}
