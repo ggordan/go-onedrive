@@ -1,6 +1,36 @@
 package onedrive
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
+
+func TestCalculateThrottle(t *testing.T) {
+
+	time1, _ := time.Parse("02 Jan 06 15:04 MST", "01 Jan 15 15:04 GMT")
+	time1e, _ := time.Parse("02 Jan 06 15:04 MST", "01 Jan 15 16:04 GMT")
+	time2, _ := time.Parse("02 Jan 06 15:04 MST", "01 Jan 15 15:04 GMT")
+	time2e, _ := time.Parse("02 Jan 06 15:04 MST", "01 Jan 15 15:05 GMT")
+
+	tt := []struct {
+		currentTime  time.Time
+		expectedTime time.Time
+		retryAfter   string
+	}{
+		{time1, time1e, "3600"},
+		{time2, time2e, "60"},
+	}
+
+	for i, tst := range tt {
+		tm, err := calculateThrottle(tst.currentTime, tst.retryAfter)
+		if err != nil {
+			t.Fatalf("%[%d] Couldn't calculate retry after: %s", i, err.Error())
+		}
+		if got, want := tm, tst.expectedTime; !got.Equal(want) {
+			t.Fatalf("%[%d] Got %s Expected %s", i, got, want)
+		}
+	}
+}
 
 func TestNewRequest(t *testing.T) {
 	setup()

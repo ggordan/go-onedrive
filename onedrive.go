@@ -1,6 +1,9 @@
 package onedrive
 
-import "net/http"
+import (
+	"net/http"
+	"time"
+)
 
 const (
 	version   = "0.1"
@@ -13,8 +16,9 @@ const (
 type OneDrive struct {
 	Client *http.Client
 	// When debug is set to true, the JSON response is formatted for better readability
-	Debug   bool
-	BaseURL string
+	Debug    bool
+	BaseURL  string
+	throttle time.Time
 	// Services
 	Drives *DriveService
 	Items  *ItemService
@@ -24,11 +28,16 @@ type OneDrive struct {
 // the API
 func NewOneDrive(c *http.Client, debug bool) *OneDrive {
 	drive := OneDrive{
-		Client:  c,
-		BaseURL: baseURL,
-		Debug:   debug,
+		Client:   c,
+		BaseURL:  baseURL,
+		Debug:    debug,
+		throttle: time.Now(),
 	}
 	drive.Drives = &DriveService{&drive}
 	drive.Items = &ItemService{&drive}
 	return &drive
+}
+
+func (od *OneDrive) throttleRequest(time time.Time) {
+	od.throttle = time
 }
