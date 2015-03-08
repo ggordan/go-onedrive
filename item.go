@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// ItemService -
+// ItemService manages the communication with Item related API endpoints
 type ItemService struct {
 	*OneDrive
 }
@@ -81,9 +81,7 @@ type Item struct {
 	Thumbnails *ThumbnailSet `json:"thumbnails"`
 }
 
-// GetByID returns a Drive for the authenticated user. If no driveID is provided
-// the users default Drive is returned. A user will always have at least one
-// Drive available -- the default Drive.
+// GetByID returns an item with the specified ID.
 func (is *ItemService) GetByID(itemID string) (*Item, *http.Response, error) {
 	path := fmt.Sprintf("/drive/items/%s", itemID)
 
@@ -101,6 +99,7 @@ func (is *ItemService) GetByID(itemID string) (*Item, *http.Response, error) {
 	return item, resp, nil
 }
 
+// GetChildrenByID returns a collection of all the Items under an Item
 func (is *ItemService) GetChildrenByID(itemID string) (*Items, *http.Response, error) {
 	path := fmt.Sprintf("/drive/items/%s/children", itemID)
 
@@ -118,17 +117,20 @@ func (is *ItemService) GetChildrenByID(itemID string) (*Items, *http.Response, e
 	return items, resp, nil
 }
 
+type newFolder struct {
+	Name   string       `json:"name"`
+	Folder *FolderFacet `json:"folder"`
+}
+
+// CreateFolder creates a new folder within the parent.
 func (is *ItemService) CreateFolder(parentID, folderName string) (*Item, *http.Response, error) {
-	newFolder := struct {
-		Name   string       `json:"name"`
-		Folder *FolderFacet `json:"folder"`
-	}{
+	folder := newFolder{
 		Name:   folderName,
 		Folder: new(FolderFacet),
 	}
 
 	path := fmt.Sprintf("/drive/items/%s/children/%s", parentID, folderName)
-	req, err := is.newRequest("PUT", path, newFolder)
+	req, err := is.newRequest("PUT", path, folder)
 	if err != nil {
 		return nil, nil, err
 	}

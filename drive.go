@@ -122,6 +122,7 @@ func (ds *DriveService) List() (*Drives, *http.Response, error) {
 	return drives, resp, nil
 }
 
+// ListChildren returns a collection of all the Items under the Drive.
 func (ds *DriveService) ListChildren(driveID string) (*Items, *http.Response, error) {
 	var path string
 
