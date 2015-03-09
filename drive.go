@@ -5,15 +5,6 @@ import (
 	"net/http"
 )
 
-type StorageState string
-
-const (
-	NormalStorageState   StorageState = "normal"
-	NearingStorageState  StorageState = "nearing"
-	CriticalStorageState StorageState = "critical"
-	ExceededStorageState StorageState = "exceeded"
-)
-
 // DriveService manages the communication with Drive related API endpoints
 type DriveService struct {
 	*OneDrive
