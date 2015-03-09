@@ -99,8 +99,8 @@ func (is *ItemService) GetByID(itemID string) (*Item, *http.Response, error) {
 	return item, resp, nil
 }
 
-// GetChildrenByID returns a collection of all the Items under an Item
-func (is *ItemService) GetChildrenByID(itemID string) (*Items, *http.Response, error) {
+// ListItemChildren returns a collection of all the Items under an Item
+func (is *ItemService) ListItemChildren(itemID string) (*Items, *http.Response, error) {
 	path := fmt.Sprintf("/drive/items/%s/children", itemID)
 
 	req, err := is.newRequest("GET", path, nil, nil)
@@ -131,6 +131,40 @@ func (is *ItemService) CreateFolder(parentID, folderName string) (*Item, *http.R
 
 	path := fmt.Sprintf("/drive/items/%s/children/%s", parentID, folderName)
 	req, err := is.newRequest("PUT", path, nil, folder)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	item := new(Item)
+	resp, err := is.do(req, item)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return item, resp, nil
+}
+
+type newWebUpload struct {
+	SourceURL string     `json:"@content.sourceUrl"`
+	Name      string     `json:"name"`
+	File      *FileFacet `json:"file"`
+}
+
+// UploadFromURL allows your app to upload an item to OneDrive by providing a URL.
+// OneDrive will download the file directly from a remote server so your app
+// doesn't have to upload the file's bytes.
+// See: http://onedrive.github.io/items/upload_url.htm
+func (is *ItemService) UploadFromURL(parentID, name, webURL string) (*Item, *http.Response, error) {
+	requestHeaders := map[string]string{
+		"Prefer": "respond-async",
+	}
+
+	newFile := newWebUpload{
+		webURL, name, new(FileFacet),
+	}
+
+	path := fmt.Sprintf("/drive/items/%s/children", parentID)
+	req, err := is.newRequest("PUT", path, requestHeaders, newFile)
 	if err != nil {
 		return nil, nil, err
 	}
