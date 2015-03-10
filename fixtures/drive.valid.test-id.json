@@ -1,0 +1,13 @@
+{
+  "id": "test-id",
+  "driveType": "consumer",
+  "owner": {
+    "device": {
+      "displayName": "test app",
+      "id": "test-id"
+    }
+  },
+  "quota": {
+    "deleted": 1
+  }
+}

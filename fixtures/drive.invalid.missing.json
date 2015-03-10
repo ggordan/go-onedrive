@@ -1,0 +1,12 @@
+{
+  "error": {
+    "code": "itemNotFound",
+    "message": "Item Does Not Exist",
+    "innererror": {
+      "code": "itemDoesNotExist",
+      "innererror": {
+        "code": "folderDoesNotExist"
+      }
+    }
+  }
+}
