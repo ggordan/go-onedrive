@@ -49,10 +49,10 @@ type Drives struct {
 // a collection of all the Items contained within the drive.
 // See: http://onedrive.github.io/resources/drive.htm
 type Drive struct {
-	ID        string      `json:"id"`
-	DriveType string      `json:"driveType"`
-	Owner     IdentitySet `json:"owner"`
-	Quota     Quota       `json:"quota"`
+	ID        string       `json:"id"`
+	DriveType string       `json:"driveType"`
+	Owner     *IdentitySet `json:"owner"`
+	Quota     *Quota       `json:"quota"`
 }
 
 // Get returns a Drive for the authenticated user. If no driveID is provided
