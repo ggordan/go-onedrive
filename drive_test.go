@@ -3,29 +3,16 @@ package onedrive
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/http"
 	"testing"
 )
 
-func fileWrapperHandler(handler func(w http.ResponseWriter, r *http.Request, file string), file string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		handler(w, r, file)
-	}
-}
-
-func defaultDriveHandler(w http.ResponseWriter, r *http.Request, file string) {
-	b, err := ioutil.ReadFile(file)
-	if err != nil {
-		panic(err)
-	}
-	w.Write(b)
-}
-
-func TestGetDefaultDrive(t *testing.T) {
+func TestGetDefaultDriveValid(t *testing.T) {
 	setup()
 	defer teardown()
 
-	fb, err := ioutil.ReadFile("fixtures/drive.valid.json")
+	testFile := "fixtures/drive.valid.json"
+
+	fb, err := ioutil.ReadFile(testFile)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,7 +22,7 @@ func TestGetDefaultDrive(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mux.HandleFunc("/drive", fileWrapperHandler(defaultDriveHandler, "fixtures/drive.valid.json"))
+	mux.HandleFunc("/drive", fileWrapperHandler(testFile))
 
 	drive, resp, err := oneDrive.Drives.GetDefaultDrive()
 	if err != nil {

@@ -83,3 +83,36 @@ func TestNewRequest(t *testing.T) {
 		}
 	}
 }
+
+// func TestDoValid(t *testing.T) {
+// 	setup()
+// 	defer teardown()
+
+// 	t1 := testStruct1{"a", "b", "c"}
+
+// 	tt := []struct {
+// 		method   string
+// 		uri      string
+// 		into     interface{}
+// 		intoType interface{}
+// 	}{
+// 		{"GET", "/foo", t1, &testStruct1{}},
+// 		{"GET", "/foo", nil, &testStruct1{}},
+// 	}
+
+// 	for i, tst := range tt {
+// 		req, err := oneDrive.newRequest(tst.method, tst.uri, nil, tst.into)
+// 		if err != nil {
+// 			t.Fatalf("[%d] %s", i, err.Error())
+// 		}
+
+// 		resp, err := oneDrive.do(req, &tst.intoType)
+// 		if err != nil {
+// 			t.Fatalf("[%d] %s", i, resp, err.Error())
+// 		}
+
+// 		fmt.Println(tst.intoType)
+
+// 	}
+
+// }
