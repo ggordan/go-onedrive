@@ -1,0 +1,51 @@
+{
+  "@content.downloadUrl": "https://download-url.com/someid",
+  "createdBy": {
+    "user": {
+      "displayName": "Gordan Grasarevic",
+      "id": "0123456789abc"
+    }
+  },
+  "createdDateTime": "2015-03-10T20:38:20.933Z",
+  "cTag": "aYzpFQkNFQzU0MDUxOTdGMEIhMTIzLjI1Ng",
+  "eTag": "aRUJDRUM1NDA1MTk3RjBCITEyMy4w",
+  "id": "0123456789abc!123",
+  "lastModifiedBy": {
+    "user": {
+      "displayName": "Gordan Grasarevic",
+      "id": "0123456789abc"
+    }
+  },
+  "lastModifiedDateTime": "2015-03-10T20:38:20.933Z",
+  "name": "Video 10-03-2015 20 34 37.mov",
+  "parentReference": {
+    "driveId": "0123456789abc",
+    "id": "0123456789abc!104",
+    "path": "/drive/root:/Test folder 1"
+  },
+  "size": 4114667,
+  "webUrl": "https://onedrive.live.com/redir?page=self&resid=0123456789abc!123",
+  "file": {
+    "hashes": {
+      "crc32Hash": "CBBE2450",
+      "sha1Hash": "990944543C492C90A703A31BFFEED09BBFCB65BC"
+    },
+    "mimeType": "video/mp4"
+  },
+  "location": {
+    "altitude": 7.824,
+    "latitude": 51.5074,
+    "longitude": -0.2377
+  },
+  "photo": {
+    "cameraMake": "Apple",
+    "cameraModel": "iPhone 5",
+    "takenDateTime": "2015-03-10T13:34:35Z"
+  },
+  "video": {
+    "bitrate": 16382248,
+    "duration": 1833,
+    "height": 1920,
+    "width": 1080
+  }
+}

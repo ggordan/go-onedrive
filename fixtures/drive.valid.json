@@ -1,17 +1,17 @@
 {
   "id": "0123456789abc",
-  "driveType": "consumer",
+  "driveType": "personal",
   "owner": {
     "user": {
-      "id": "12391913bac",
-      "displayName": "Ryan Gregg"
+      "displayName": "Gordan Grasarevic",
+      "id": "0123456789abc"
     }
   },
   "quota": {
-    "total": 1024000,
-    "used": 514000,
-    "remaining": 1010112,
     "deleted": 0,
-    "state": "normal"
+    "remaining": 16095471537,
+    "state": "normal",
+    "total": 16106127360,
+    "used": 10655823
   }
 }

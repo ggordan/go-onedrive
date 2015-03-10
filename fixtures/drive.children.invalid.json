@@ -1,0 +1,117 @@
+{
+  "value": [
+    {
+      "createdBy": {
+        "application": {
+          "displayName": "OneDrive website",
+          "id": "44048800"
+        },
+        "user": {
+          "displayName": "Gordan Grasarevic",
+          "id": "0123456789abc"
+        }
+      },
+      "createdDateTime": "2015-03-08T03:26:46.443Z",
+      "cTag": "aZjpFQkNFQzU0MDUxOTdGMEIhMTA0LjYzNTYxNDk5NTE3MzMzMDAwMA",
+      "eTag": "aRUJDRUM1NDA1MTk3RjBCITEwNC4z",
+      "id": "0123456789abc!104",
+      "lastModifiedBy": {
+        "application": {
+          "displayName": "OneDrive website",
+          "id": "44048800"
+        },
+        "user": {
+          "displayName": "Gordan Grasarevic",
+          "id": "0123456789abc"
+        }
+      },
+      "lastModifiedDateTime": "2015-03-09T12:05:17.333Z",
+      "name": "Test folder 1",
+      "parentReference": {
+        "driveId": "0123456789abc",
+        "id": "0123456789abc!101",
+        "path": "/drive/root:"
+      },
+      "size": 9989166,
+      "webUrl": "https://onedrive.live.com/redir?page=self&resid=0123456789abc!104",
+      "folder": {
+        "childCount": 10
+      }
+    },
+    {
+      "createdBy": {
+        "application": {
+          "displayName": "OneDrive website",
+          "id": "44048800"
+        },
+        "user": {
+          "displayName": "Gordan Grasarevic",
+          "id": "0123456789abc"
+        }
+      },
+      "createdDateTime": "2015-03-08T11:25:39.92Z",
+      "cTag": "aZjpFQkNFQzU0MDUxOTdGMEIhMTA1LjYzNTYxNDk4NDkzNDIzMDAwMA",
+      "eTag": "aRUJDRUM1NDA1MTk3RjBCITEwNS4x",
+      "id": "0123456789abc!105",
+      "lastModifiedBy": {
+        "application": {
+          "displayName": "OneDrive website",
+          "id": "44048800"
+        },
+        "user": {
+          "displayName": "Gordan Grasarevic",
+          "id": "0123456789abc"
+        }
+      },
+      "lastModifiedDateTime": "2015-03-09T11:48:13.423Z",
+      "name": "Test folder 2",
+      "parentReference": {
+        "driveId": "0123456789abc",
+        "id": "0123456789abc!101",
+        "path": "/drive/root:"
+      },
+      "size": 0,
+      "webUrl": "https://onedrive.live.com/redir?page=self&resid=0123456789abc!105",
+      "folder": {
+        "childCount": 1
+      }
+    },
+    {
+      "@content.downloadUrl": "https://download-url.com/someid",
+      "createdBy": {
+        "user": {
+          "displayName": "Gordan Grasarevic",
+          "id": "0123456789abc"
+        }
+      },
+      "createdDateTime": "2015-03-09T11:49:36.437Z",
+      "cTag": "aYzpFQkNFQzU0MDUxOTdGMEIhMTEwLjI1Ng",
+      "eTag": "aRUJDRUM1NDA1MTk3RjBCITExMC4z",
+      "id": "0123456789abc!110",
+      "lastModifiedBy": {
+        "user": {
+          "displayName": "Gordan Grasarevic",
+          "id": "0123456789abc"
+        }
+      },
+      "lastModifiedDateTime": "2015-03-09T11:50:00.63Z",
+      "name": "sydney_opera_house_2011-1920x1080.jpg",
+      "parentReference": {
+        "driveId": "0123456789abc",
+        "id": "0123456789abc!101",
+        "path": "/drive/root:"
+      },
+      "size": 666657,
+      "webUrl": "https://onedrive.live.com/redir?page=self&resid=0123456789abc!110",
+      "file": {
+        "hashes": {
+          "crc32Hash": "FEBB5160",
+          "sha1Hash": "6968B0F0934762EC44ADBC90959FAC6F03FBE211"
+      },
+      "image": {
+        "height": 1080,
+        "width": 1920
+      }
+    }
+  ]
+}

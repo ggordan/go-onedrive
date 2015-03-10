@@ -1,0 +1,26 @@
+{
+  "@content.downloadUrl": "https://download-url.com/someid",
+  "createdBy": {
+    "user": {
+      "displayName": "Gordan Grasarevic",
+      "id": "0123456789abc"
+    }
+  },
+  "createdDateTime": "2015-03-10T20:30:55.873Z",
+  "cTag": "aYzpFQkNFQzU0MDUxOTdGMEIhMTIxLjI2Ng",
+  "eTag": "aRUJDRUM1NDA1MTk3RjBCITEyMS45",
+  "id": "0123456789abc!121",
+  "lastModifiedBy": {
+    "user": {
+      "displayName": "Gordan Grasarevic",
+      "id": "0123456789abc"
+    }
+  },
+  "lastModifiedDateTime": "2015-03-10T20:31:34.943Z",
+  "name": "01 Perth.mp3",
+  "parentReference": {
+      "sha1Hash": "61AA4245BAB442EB18920B293C3E24B44457E665"
+    },
+    "mimeType": "audio/mpeg"
+  }
+}

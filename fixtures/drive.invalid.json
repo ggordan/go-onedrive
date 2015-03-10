@@ -1,0 +1,11 @@
+{
+  "id": "0123456789abc",
+  },
+  "quota": {
+    "deleted": 0,
+    "remaining": 16095471537,
+    "state": "normal",
+    "total": 16106127360,
+    "used": 10655823
+  }
+}
