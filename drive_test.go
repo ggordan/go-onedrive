@@ -1,29 +1,36 @@
 package onedrive
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"reflect"
 	"testing"
 )
+
+func TestGet(t *testing.T) {
+}
 
 func TestGetDefaultDrive(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testFile := "fixtures/drive.valid.json"
-
-	fb, err := ioutil.ReadFile(testFile)
-	if err != nil {
-		t.Fatal(err)
+	expectedDrive := &Drive{
+		ID:        "0123456789abc",
+		DriveType: "personal",
+		Owner: &IdentitySet{
+			User: &Identity{
+				DisplayName: "Gordan Grasarevic",
+				ID:          "0123456789abc",
+			},
+		},
+		Quota: &Quota{
+			Deleted:   0,
+			Remaining: 16095471537,
+			State:     "normal",
+			Total:     16106127360,
+			Used:      10655823,
+		},
 	}
 
-	var expectedDrive Drive
-	if err := json.Unmarshal(fb, &expectedDrive); err != nil {
-		t.Fatal(err)
-	}
-
-	mux.HandleFunc("/drive", fileWrapperHandler(testFile))
-
+	mux.HandleFunc("/drive", fileWrapperHandler("fixtures/drive.valid.json"))
 	defaultDrive, resp, err := oneDrive.Drives.GetDefaultDrive()
 	if err != nil {
 		t.Fatalf("Problem fetching the default drive: %s", err.Error())
@@ -33,35 +40,35 @@ func TestGetDefaultDrive(t *testing.T) {
 		t.Fatalf("Expected response to be 200 got %d", resp.StatusCode)
 	}
 
-	if got, want := defaultDrive.ID, expectedDrive.ID; got != want {
-		t.Fatalf("Got %q Expected %q", got, want)
+	if !reflect.DeepEqual(defaultDrive, expectedDrive) {
+		t.Errorf("Got %v Expected %v", defaultDrive, expectedDrive)
 	}
-
-	if got, want := defaultDrive.Owner.User.DisplayName, expectedDrive.Owner.User.DisplayName; got != want {
-		t.Fatalf("Got %q Expected %q", got, want)
-	}
-
 }
 
 func TestGetRootDrive(t *testing.T) {
 	setup()
 	defer teardown()
 
-	testFile := "fixtures/drive.valid.json"
-
-	fb, err := ioutil.ReadFile(testFile)
-	if err != nil {
-		t.Fatal(err)
+	rootDrive := &Drive{
+		ID:        "0123456789abc",
+		DriveType: "personal",
+		Owner: &IdentitySet{
+			User: &Identity{
+				DisplayName: "Gordan Grasarevic",
+				ID:          "0123456789abc",
+			},
+		},
+		Quota: &Quota{
+			Deleted:   0,
+			Remaining: 16095471537,
+			State:     "normal",
+			Total:     16106127360,
+			Used:      10655823,
+		},
 	}
 
-	var expectedDrive Drive
-	if err := json.Unmarshal(fb, &expectedDrive); err != nil {
-		t.Fatal(err)
-	}
-
-	mux.HandleFunc("/drive/root", fileWrapperHandler(testFile))
-
-	rootDrive, resp, err := oneDrive.Drives.GetRootDrive()
+	mux.HandleFunc("/drive/root", fileWrapperHandler("fixtures/drive.valid.json"))
+	defaultDrive, resp, err := oneDrive.Drives.GetRootDrive()
 	if err != nil {
 		t.Fatalf("Problem fetching the root drive: %s", err.Error())
 	}
@@ -70,12 +77,7 @@ func TestGetRootDrive(t *testing.T) {
 		t.Fatalf("Expected response to be 200 got %d", resp.StatusCode)
 	}
 
-	if got, want := rootDrive.ID, expectedDrive.ID; got != want {
-		t.Fatalf("Got %q Expected %q", got, want)
+	if !reflect.DeepEqual(defaultDrive, rootDrive) {
+		t.Errorf("Got %v Expected %v", defaultDrive, rootDrive)
 	}
-
-	if got, want := rootDrive.Owner.User.DisplayName, expectedDrive.Owner.User.DisplayName; got != want {
-		t.Fatalf("Got %q Expected %q", got, want)
-	}
-
 }
