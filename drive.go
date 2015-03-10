@@ -55,24 +55,22 @@ type Drive struct {
 	Quota     *Quota       `json:"quota"`
 }
 
+func drivePathFromID(driveID string) string {
+	switch driveID {
+	case "":
+		return "/drive"
+	case "root":
+		return "/drive/root"
+	default:
+		return fmt.Sprintf("/drives/%s", driveID)
+	}
+}
+
 // Get returns a Drive for the authenticated user. If no driveID is provided
 // the users default Drive is returned. A user will always have at least one
 // Drive available -- the default Drive.
 func (ds *DriveService) Get(driveID string) (*Drive, *http.Response, error) {
-	var path string
-
-	switch driveID {
-	case "":
-		path = "/drive"
-		break
-	case "root":
-		path = "/drive/root"
-		break
-	default:
-		path = fmt.Sprintf("/drives/%s", driveID)
-	}
-
-	req, err := ds.newRequest("GET", path, nil, nil)
+	req, err := ds.newRequest("GET", drivePathFromID(driveID), nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
