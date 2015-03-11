@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "invalidArgument",
+    "message": "Bad Argument",
+    "innererror": {
+      "code": "badArgument"
+    }
+  }
+}

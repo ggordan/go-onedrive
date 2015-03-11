@@ -6,9 +6,9 @@
       "id": "0123456789abc"
     }
   },
-  "createdDateTime": "2015-03-10T20:38:20.933Z",
-  "cTag": "aYzpFQkNFQzU0MDUxOTdGMEIhMTIzLjI1Ng",
-  "eTag": "aRUJDRUM1NDA1MTk3RjBCITEyMy4w",
+  "createdDateTime": "2015-03-08T03:26:46.443Z",
+  "cTag": "ctag",
+  "eTag": "etag",
   "id": "0123456789abc!123",
   "lastModifiedBy": {
     "user": {
@@ -16,7 +16,7 @@
       "id": "0123456789abc"
     }
   },
-  "lastModifiedDateTime": "2015-03-10T20:38:20.933Z",
+  "lastModifiedDateTime": "2015-03-09T12:05:17.333Z",
   "name": "Video 10-03-2015 20 34 37.mov",
   "parentReference": {
     "driveId": "0123456789abc",

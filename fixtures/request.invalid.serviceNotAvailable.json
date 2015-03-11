@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "serviceNotAvailable",
+    "message": "Service is temporarily unavailable",
+    "innererror": {
+      "code": "serviceNotAvailable"
+    }
+  }
+}

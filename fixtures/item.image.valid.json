@@ -6,9 +6,9 @@
       "id": "0123456789abc"
     }
   },
-  "createdDateTime": "2015-03-09T11:49:36.437Z",
-  "cTag": "aYzpFQkNFQzU0MDUxOTdGMEIhMTEwLjI1Ng",
-  "eTag": "aRUJDRUM1NDA1MTk3RjBCITExMC4z",
+  "createdDateTime": "2015-03-08T03:26:46.443Z",
+  "cTag": "ctag",
+  "eTag": "etag",
   "id": "0123456789abc!110",
   "lastModifiedBy": {
     "user": {
@@ -16,7 +16,7 @@
       "id": "0123456789abc"
     }
   },
-  "lastModifiedDateTime": "2015-03-09T11:50:00.63Z",
+  "lastModifiedDateTime": "2015-03-09T12:05:17.333Z",
   "name": "sydney_opera_house_2011-1920x1080.jpg",
   "parentReference": {
     "driveId": "0123456789abc",

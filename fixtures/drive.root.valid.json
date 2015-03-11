@@ -1,5 +1,4 @@
 {
-  "@content.downloadUrl": "https://download-url.com/someid",
   "createdBy": {
     "user": {
       "displayName": "Gordan Grasarevic",
@@ -9,18 +8,22 @@
   "createdDateTime": "2015-03-08T03:26:46.443Z",
   "cTag": "ctag",
   "eTag": "etag",
-  "id": "0123456789abc!121",
+  "id": "EBCEC5405197F0B!101",
   "lastModifiedBy": {
+    "application": {
+      "displayName": "OneDrive website",
+      "id": "44048800"
+    },
     "user": {
       "displayName": "Gordan Grasarevic",
       "id": "0123456789abc"
     }
   },
   "lastModifiedDateTime": "2015-03-09T12:05:17.333Z",
-  "name": "01 Perth.mp3",
-  "parentReference": {
-      "sha1Hash": "61AA4245BAB442EB18920B293C3E24B44457E665"
-    },
-    "mimeType": "audio/mpeg"
+  "name": "root",
+  "size": 17546845,
+  "webUrl": "https://onedrive.live.com/redir?page=self&resid=EBCEC5405197F0B!101",
+  "folder": {
+    "childCount": 3
   }
 }

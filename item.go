@@ -81,11 +81,20 @@ type Item struct {
 	Thumbnails *ThumbnailSet `json:"thumbnails"`
 }
 
-// GetByID returns an item with the specified ID.
-func (is *ItemService) GetByID(itemID string) (*Item, *http.Response, error) {
-	path := fmt.Sprintf("/drive/items/%s", itemID)
+// driveURIFromID returns a valid request URI based on the ID of the drive.
+// Mostly exists to simplify special cases such as the default and root drives.
+func itemURIFromID(itemID string) string {
+	switch itemID {
+	case "", "root":
+		return "/drive/root"
+	default:
+		return fmt.Sprintf("/drive/items/%s", itemID)
+	}
+}
 
-	req, err := is.newRequest("GET", path, nil, nil)
+// Get returns an item with the specified ID.
+func (is *ItemService) Get(itemID string) (*Item, *http.Response, error) {
+	req, err := is.newRequest("GET", itemURIFromID(itemID), nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -99,8 +108,14 @@ func (is *ItemService) GetByID(itemID string) (*Item, *http.Response, error) {
 	return item, resp, nil
 }
 
-// ListItemChildren returns a collection of all the Items under an Item
-func (is *ItemService) ListItemChildren(itemID string) (*Items, *http.Response, error) {
+// GetDefaultDriveRootFolder is a convenience function to return the root folder
+// of the users default Drive
+func (is *ItemService) GetDefaultDriveRootFolder() (*Item, *http.Response, error) {
+	return is.Get("root")
+}
+
+// ListChildren returns a collection of all the Items under an Item
+func (is *ItemService) ListChildren(itemID string) (*Items, *http.Response, error) {
 	path := fmt.Sprintf("/drive/items/%s/children", itemID)
 
 	req, err := is.newRequest("GET", path, nil, nil)

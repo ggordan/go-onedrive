@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "unauthenticated",
+    "message": "Authentication failed",
+    "innererror": {
+      "code": "passportAuthFail"
+    }
+  }
+}

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DriveService manages the communication with Drive related API endpoints
+// DriveService manages the communication with Drive related API endpoints.
 type DriveService struct {
 	*OneDrive
 }
@@ -39,9 +39,9 @@ type Quota struct {
 	State     string `json:"state"`
 }
 
-// Drives represents a list of Drives
+// Drives represents a collection of Drives
 type Drives struct {
-	List []*Drive `json:"value"`
+	Collection []*Drive `json:"value"`
 }
 
 // The Drive resource represents a drive in OneDrive. It provides information
@@ -53,16 +53,31 @@ type Drive struct {
 	DriveType string       `json:"driveType"`
 	Owner     *IdentitySet `json:"owner"`
 	Quota     *Quota       `json:"quota"`
+	// Relationships
+	Items   *Items `json:"items"`
+	Root    *Item  `json:"root"`
+	Special *Items `json:"special"`
+	Shares  *Items `json:"shares"`
 }
 
-func drivePathFromID(driveID string) string {
+// driveURIFromID returns a valid request URI based on the ID of the drive.
+func driveURIFromID(driveID string) string {
 	switch driveID {
-	case "":
+	case "", "default":
 		return "/drive"
-	case "root":
-		return "/drive/root"
 	default:
 		return fmt.Sprintf("/drives/%s", driveID)
+	}
+}
+
+// driveChildrenURIFromID returns a valid request URI to fetch the Drive root
+// children based on the ID of the Drive.
+func driveChildrenURIFromID(driveID string) string {
+	switch driveID {
+	case "", "root", "default":
+		return "/drive/root/children"
+	default:
+		return fmt.Sprintf("/drives/%s/root/children", driveID)
 	}
 }
 
@@ -70,7 +85,7 @@ func drivePathFromID(driveID string) string {
 // the users default Drive is returned. A user will always have at least one
 // Drive available -- the default Drive.
 func (ds *DriveService) Get(driveID string) (*Drive, *http.Response, error) {
-	req, err := ds.newRequest("GET", drivePathFromID(driveID), nil, nil)
+	req, err := ds.newRequest("GET", driveURIFromID(driveID), nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -84,19 +99,13 @@ func (ds *DriveService) Get(driveID string) (*Drive, *http.Response, error) {
 	return drive, resp, nil
 }
 
-// GetDefaultDrive is a convenience function to return the users default Drive
-func (ds *DriveService) GetDefaultDrive() (*Drive, *http.Response, error) {
+// GetDefault is a convenience function to return the users default Drive
+func (ds *DriveService) GetDefault() (*Drive, *http.Response, error) {
 	return ds.Get("")
 }
 
-// GetRootDrive is a convenience function to return the users root folder of the
-// users default Drive
-func (ds *DriveService) GetRootDrive() (*Drive, *http.Response, error) {
-	return ds.Get("root")
-}
-
-// List returns all the Drives available to the authenticated user
-func (ds *DriveService) List() (*Drives, *http.Response, error) {
+// ListAll returns all the Drives available to the authenticated user
+func (ds *DriveService) ListAll() (*Drives, *http.Response, error) {
 	req, err := ds.newRequest("GET", "/drives", nil, nil)
 	if err != nil {
 		return nil, nil, err
@@ -111,19 +120,9 @@ func (ds *DriveService) List() (*Drives, *http.Response, error) {
 	return drives, resp, nil
 }
 
-// ListChildren returns a collection of all the Items under the Drive.
+// ListChildren returns a collection of all the Items under the Drive root.
 func (ds *DriveService) ListChildren(driveID string) (*Items, *http.Response, error) {
-	var path string
-
-	switch driveID {
-	case "root":
-		path = "/drive/root/children"
-		break
-	default:
-		path = fmt.Sprintf("/drives/%s/root/children", driveID)
-	}
-
-	req, err := ds.newRequest("GET", path, nil, nil)
+	req, err := ds.newRequest("GET", driveChildrenURIFromID(driveID), nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -6,9 +6,9 @@
       "id": "0123456789abc"
     }
   },
-  "createdDateTime": "2015-03-10T20:30:55.873Z",
-  "cTag": "aYzpFQkNFQzU0MDUxOTdGMEIhMTIxLjI2Ng",
-  "eTag": "aRUJDRUM1NDA1MTk3RjBCITEyMS45",
+  "createdDateTime": "2015-03-08T03:26:46.443Z",
+  "cTag": "ctag",
+  "eTag": "etag",
   "id": "0123456789abc!121",
   "lastModifiedBy": {
     "user": {
@@ -16,7 +16,7 @@
       "id": "0123456789abc"
     }
   },
-  "lastModifiedDateTime": "2015-03-10T20:31:34.943Z",
+  "lastModifiedDateTime": "2015-03-09T12:05:17.333Z",
   "name": "01 Perth.mp3",
   "parentReference": {
     "driveId": "0123456789abc",

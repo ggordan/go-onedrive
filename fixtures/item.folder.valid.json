@@ -5,9 +5,9 @@
       "id": "0123456789abc"
     }
   },
-  "createdDateTime": "2013-11-26T12:05:23.327Z",
-  "cTag": "aZjpFQkNFQzU0MDUxOTdGMEIhMTAxLjYzNTYxNDk5NTE3MzMzMDAwMA",
-  "eTag": "aRUJDRUM1NDA1MTk3RjBCITEwMS4x",
+  "createdDateTime": "2015-03-08T03:26:46.443Z",
+  "cTag": "ctag",
+  "eTag": "etag",
   "id": "0123456789abc!101",
   "lastModifiedBy": {
     "application": {
