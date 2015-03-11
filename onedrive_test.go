@@ -23,23 +23,13 @@ func teardown() {
 	server.Close()
 }
 
-func fileWrapperHandler(file string) http.HandlerFunc {
+func fileWrapperHandler(file string, status int) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(status)
 		b, err := ioutil.ReadFile(file)
 		if err != nil {
 			panic(err)
 		}
 		w.Write(b)
 	}
-}
-
-type testStruct1 struct {
-	as string `json:"as"`
-	bs string `json:"bs"`
-	cs string `json:"cs"`
-}
-type testStruct2 struct {
-	as string
-	af float64
-	ai int
 }
