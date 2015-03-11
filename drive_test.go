@@ -227,11 +227,11 @@ func TestListDriveChildren(t *testing.T) {
 		t.Fatalf("Problem fetching the drive children: %s", err.Error())
 	}
 
-	if got, want := len(items.List), 3; got != want {
+	if got, want := len(items.Collection), 3; got != want {
 		t.Fatalf("Got %d, Expected %d children", got, want)
 	}
 
-	if got, want := items.List[0], testFolder1; !reflect.DeepEqual(got, want) {
+	if got, want := items.Collection[0], testFolder1; !reflect.DeepEqual(got, want) {
 		t.Errorf("Got %v Expected %v", *got, *want)
 	}
 }

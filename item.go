@@ -32,9 +32,9 @@ type ThumbnailSet struct {
 	Large  *Thumbnail `json:"large"`
 }
 
-// Items represents a list of Items
+// Items represents a collection of Items
 type Items struct {
-	List []*Item `json:"value"`
+	Collection []*Item `json:"value"`
 }
 
 // The ItemReference type groups data needed to reference a OneDrive item across
