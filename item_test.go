@@ -50,6 +50,71 @@ func newItem(name, id string, size int64) *Item {
 	}
 }
 
+func newBaseItem(name, id string, size int64) *Item {
+	return &Item{
+		Name:                 name,
+		ID:                   id,
+		Size:                 size,
+		CTag:                 "ctag",
+		ETag:                 "etag",
+		WebURL:               "https://onedrive.live.com/redir?page=self&resid=" + id,
+		CreatedDateTime:      parseTime("2015-03-08T03:26:46.443Z"),
+		LastModifiedDateTime: parseTime("2015-03-09T12:05:17.333Z"),
+		DownloadURL:          "https://download-url.com/someid",
+		CreatedBy: &IdentitySet{
+			User: userIdentity,
+		},
+		LastModifiedBy: &IdentitySet{
+			User:        userIdentity,
+			Application: appIdentity,
+		},
+		ParentReference: &ItemReference{
+			DriveID: "0123456789abc",
+			ID:      "0123456789abc!104",
+			Path:    "/drive/root:/Test folder 1",
+		},
+	}
+}
+
+func newAudioItem(name, id string, size int64, audio *AudioFacet, file *FileFacet) *Item {
+	item := newBaseItem(name, id, size)
+	item.Audio = audio
+	item.File = file
+	return item
+}
+
+func newFolderItem(name, id string, size int64, folder *FolderFacet) *Item {
+	item := newBaseItem(name, id, size)
+	item.DownloadURL = ""
+	item.ParentReference = nil
+	item.Folder = folder
+	return item
+}
+
+func newImageItem(name, id string, size int64, image *ImageFacet, file *FileFacet) *Item {
+	item := newBaseItem(name, id, size)
+	item.Image = image
+	item.File = file
+	return item
+}
+
+func newPhotoItem(name, id string, size int64, image *ImageFacet, file *FileFacet, photo *PhotoFacet) *Item {
+	item := newBaseItem(name, id, size)
+	item.Image = image
+	item.File = file
+	item.Photo = photo
+	return item
+}
+
+func newVideoItem(name, id string, size int64, file *FileFacet, photo *PhotoFacet, location *LocationFacet, video *VideoFacet) *Item {
+	item := newBaseItem(name, id, size)
+	item.Location = location
+	item.Photo = photo
+	item.File = file
+	item.Video = video
+	return item
+}
+
 func TestItemURIFromID(t *testing.T) {
 	tt := []struct {
 		in, out string
@@ -70,24 +135,50 @@ func TestGetItem(t *testing.T) {
 	setup()
 	defer teardown()
 
+	audioItem := newAudioItem("01 Perth.mp3", "0123456789abc!121", 7904129,
+		newAudioFacet("Bon Iver", "Bon Iver", "Bon Iver", 238, "Justin Vernon", "", 1, 1, 262138, "\u00a7", false, true, "Perth", 1, 0, 2011),
+		newFileFacet("audio/mpeg", newHashesFacet("61AA4245BAB442EB18920B293C3E24B44457E665", "CEF984EA")),
+	)
+
+	folderItem := newFolderItem("root", "0123456789abc!101", 10655823, newFolderFacet(3))
+
+	imageItem := newImageItem("sydney_opera_house_2011-1920x1080.jpg", "0123456789abc!110", 666657,
+		newImageFacet(1080, 1920),
+		newFileFacet("image/jpeg", newHashesFacet("6968B0F0934762EC44ADBC90959FAC6F03FBE211", "FEBB5160")),
+	)
+
+	photoItem := newPhotoItem("IMG_2538.JPG", "0123456789abc!119", 403305,
+		newImageFacet(480, 720),
+		newFileFacet("image/jpeg", newHashesFacet("D528F485B3A594A36F00ED7633DC2AE1C442A93D", "4DD1C268")),
+		newPhotoFacet(parseTime("2013-11-28T11:57:27Z"), "Canon", "Canon EOS 600D", 9.0, 200.0, 1.0, 18.0, 0),
+	)
+
+	videoItem := newVideoItem("Video 10-03-2015 20 34 37.mov", "0123456789abc!123", 4114667,
+		newFileFacet("video/mp4", newHashesFacet("990944543C492C90A703A31BFFEED09BBFCB65BC", "CBBE2450")),
+		newPhotoFacet(parseTime("2015-03-10T13:34:35Z"), "Apple", "iPhone 5", 0.0, 0.0, 0.0, 0.0, 0),
+		newLocationFacet(7.824, 51.5074, -0.2377),
+		newVideoFacet(16382248, 1833, 1920, 1080),
+	)
+
 	tt := []struct {
 		itemID         string
 		expectedStatus int
-		expectedOut    *Drive
+		expectedOut    *Item
 	}{
-		{"folder", 200, expectedDefaultDrive},
-		{"image", 200, expectedDefaultDrive},
-		{"photo", 200, expectedDefaultDrive},
-		{"video", 200, expectedDefaultDrive},
+		{"audio", 200, audioItem},
+		{"folder", 200, folderItem},
+		{"image", 200, imageItem},
+		{"photo", 200, photoItem},
+		{"video", 200, videoItem},
 	}
 	for i, tst := range tt {
 		mux.HandleFunc(itemURIFromID(tst.itemID), fileWrapperHandler(validFixtureFromItemID(tst.itemID), 200))
-		drive, _, err := oneDrive.Items.Get(tst.itemID)
+		item, _, err := oneDrive.Items.Get(tst.itemID)
 		if err != nil {
 			t.Fatalf("Problem fetching the default drive: %s", err.Error())
 		}
-		if !reflect.DeepEqual(drive, tst.expectedOut) {
-			t.Errorf("[%d] Got %v Expected %v", i, drive, tst.expectedOut)
+		if !reflect.DeepEqual(item, tst.expectedOut) {
+			t.Errorf("[%d] Got \n%v Expected \n%v", i, *item, *tst.expectedOut)
 		}
 	}
 }

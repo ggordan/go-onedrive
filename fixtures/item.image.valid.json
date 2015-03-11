@@ -11,6 +11,10 @@
   "eTag": "etag",
   "id": "0123456789abc!110",
   "lastModifiedBy": {
+    "application": {
+      "displayName": "OneDrive website",
+      "id": "44048800"
+    },
     "user": {
       "displayName": "Gordan Grasarevic",
       "id": "0123456789abc"
@@ -20,8 +24,8 @@
   "name": "sydney_opera_house_2011-1920x1080.jpg",
   "parentReference": {
     "driveId": "0123456789abc",
-    "id": "0123456789abc!101",
-    "path": "/drive/root:"
+    "id": "0123456789abc!104",
+    "path": "/drive/root:/Test folder 1"
   },
   "size": 666657,
   "webUrl": "https://onedrive.live.com/redir?page=self&resid=0123456789abc!110",

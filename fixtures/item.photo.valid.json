@@ -11,6 +11,10 @@
 "eTag": "etag",
 "id": "0123456789abc!119",
 "lastModifiedBy": {
+  "application": {
+    "displayName": "OneDrive website",
+    "id": "44048800"
+  },
   "user": {
     "displayName": "Gordan Grasarevic",
     "id": "0123456789abc"
