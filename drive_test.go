@@ -2,6 +2,8 @@ package onedrive
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"reflect"
 	"testing"
 )
@@ -74,6 +76,46 @@ func TestGet(t *testing.T) {
 		if !reflect.DeepEqual(drive, tst.expectedOut) {
 			t.Errorf("[%d] Got %v Expected %v", i, drive, tst.expectedOut)
 		}
+	}
+}
+
+func TestGetMissing(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/drives/missing-drive", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(404)
+		b, err := ioutil.ReadFile("fixtures/drive.invalid.missing.json")
+		if err != nil {
+			panic(err)
+		}
+		w.Write(b)
+	})
+
+	missingDrive, resp, err := oneDrive.Drives.Get("missing-drive")
+	if missingDrive != nil {
+		t.Fatalf("A drive was returned when an error was expected: %v", resp)
+	}
+
+	if resp.StatusCode != 404 {
+		t.Fatalf("Expected response to be 404 got %d", resp.StatusCode)
+	}
+
+	expectedErr := &Error{
+		InnerError{
+			Code:    "itemNotFound",
+			Message: "Item Does Not Exist",
+			InnerError: &InnerError{
+				Code: "itemDoesNotExist",
+				InnerError: &InnerError{
+					Code: "folderDoesNotExist",
+				},
+			},
+		},
+	}
+
+	if !reflect.DeepEqual(expectedErr, err) {
+		t.Errorf("Got %v Expected %v", err, expectedErr)
 	}
 }
 
