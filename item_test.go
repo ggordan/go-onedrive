@@ -183,6 +183,34 @@ func TestGetItem(t *testing.T) {
 	}
 }
 
+func TestGetItemInvalid(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc(itemURIFromID("missing"), fileWrapperHandler("fixtures/request.invalid.notFound.json", 404))
+	missingDrive, resp, err := oneDrive.Items.Get("missing")
+	if missingDrive != nil {
+		t.Fatalf("A drive was returned when an error was expected: %v", resp)
+	}
+
+	expectedErr := &Error{
+		InnerError{
+			Code:    "itemNotFound",
+			Message: "Item Does Not Exist",
+			InnerError: &InnerError{
+				Code: "itemDoesNotExist",
+				InnerError: &InnerError{
+					Code: "folderDoesNotExist",
+				},
+			},
+		},
+	}
+
+	if !reflect.DeepEqual(expectedErr, err) {
+		t.Errorf("Got %v Expected %v", err, expectedErr)
+	}
+}
+
 func TestGetDefaultDriveRootFolder(t *testing.T) {
 	setup()
 	defer teardown()

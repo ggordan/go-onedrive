@@ -105,7 +105,7 @@ func TestGetMissing(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/drives/missing-drive", fileWrapperHandler("fixtures/drive.invalid.missing.json", 404))
+	mux.HandleFunc("/drives/missing-drive", fileWrapperHandler("fixtures/request.invalid.notFound.json", 404))
 	missingDrive, resp, err := oneDrive.Drives.Get("missing-drive")
 	if missingDrive != nil {
 		t.Fatalf("A drive was returned when an error was expected: %v", resp)
