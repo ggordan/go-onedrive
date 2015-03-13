@@ -237,3 +237,26 @@ func TestGetDefaultDriveRootFolder(t *testing.T) {
 		t.Errorf("Got %v Expected %v", *got, *want)
 	}
 }
+
+func TestListItemChildren(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/drive/items/some-id/children", fileWrapperHandler("fixtures/item.children.valid.json", 200))
+	items, _, err := oneDrive.Items.ListChildren("some-id")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if got, want := len(items.Collection), 3; got != want {
+		t.Fatalf("Got %d Expected %d", got, want)
+	}
+
+	if got, want := items.Collection[0].Folder.ChildCount, int64(10); got != want {
+		t.Fatalf("Got %d Expected %d folder child items", got, want)
+	}
+
+	if got, want := items.Collection[1].Name, "Test folder 2"; got != want {
+		t.Fatalf("Got %q Expected %q", got, want)
+	}
+}
