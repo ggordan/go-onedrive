@@ -34,7 +34,7 @@ func calculateThrottle(currentTime time.Time, retryAfter string) (time.Time, err
 
 func (od *OneDrive) newRequest(method, uri string, requestHeaders map[string]string, body interface{}) (*http.Request, error) {
 	if !time.Now().After(od.throttle) {
-		return nil, errors.New(fmt.Sprintf("you are making tooMany requests. Please wait: %s", od.throttle.Sub(time.Now())))
+		return nil, errors.New(fmt.Sprintf("you are making too many requests. Please wait: %s", od.throttle.Sub(time.Now())))
 	}
 
 	requestBody, err := createRequestBody(body)
