@@ -1,0 +1,9 @@
+{
+  "error": {
+    "code": "tooManyRequests",
+    "message": "Too Many Requests",
+    "innererror": {
+      "code": "tooManyRequests"
+    }
+  }
+}

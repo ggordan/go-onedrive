@@ -1,6 +1,8 @@
 package onedrive
 
 import (
+	"io/ioutil"
+	"net/http"
 	"testing"
 	"time"
 )
@@ -32,87 +34,81 @@ func TestCalculateThrottle(t *testing.T) {
 	}
 }
 
-// func TestNewRequest(t *testing.T) {
-// 	setup()
-// 	defer teardown()
+func TestNewRequest(t *testing.T) {
+	setup()
+	defer teardown()
 
-// 	tt := []struct {
-// 		method         string
-// 		uri            string
-// 		requestHeaders map[string]string
-// 		debug          bool
-// 		body           interface{}
-// 	}{
-// 		{"GET", "/foo", map[string]string{"Content-Type": "text/plain"}, false, nil},
-// 		{"POST", "/foo/two", nil, true, ""},
-// 		{"DELETE", "/foo/two", nil, true, testStruct1{"a", "b", "c"}},
-// 	}
+	tt := []struct {
+		method         string
+		uri            string
+		requestHeaders map[string]string
+		debug          bool
+		body           interface{}
+	}{
+		{"GET", "/foo", map[string]string{"Content-Type": "text/plain"}, false, nil},
+		{"POST", "/foo/two", nil, true, ""},
+		{"DELETE", "/foo/two", nil, true, Item{ID: "hello world"}},
+	}
 
-// 	for i, tst := range tt {
-// 		oneDrive.Debug = tst.debug
+	for i, tst := range tt {
+		oneDrive.Debug = tst.debug
 
-// 		req, err := oneDrive.newRequest(tst.method, tst.uri, tst.requestHeaders, tst.body)
-// 		if err != nil {
-// 			t.Fatal(err)
-// 		}
+		req, err := oneDrive.newRequest(tst.method, tst.uri, tst.requestHeaders, tst.body)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-// 		if tst.debug {
-// 			if got, want := req.Header.Get("Accept"), "application/json;format=pretty"; got != want {
-// 				t.Fatalf("[%d] Got %q Expected %q", i, got, want)
-// 			}
-// 		} else {
-// 			if got, want := req.Header.Get("Accept"), "application/json"; got != want {
-// 				t.Fatalf("[%d] Got %q Expected %q", i, got, want)
-// 			}
-// 		}
+		if tst.debug {
+			if got, want := req.Header.Get("Accept"), "application/json;format=pretty"; got != want {
+				t.Fatalf("[%d] Got %q Expected %q", i, got, want)
+			}
+		} else {
+			if got, want := req.Header.Get("Accept"), "application/json"; got != want {
+				t.Fatalf("[%d] Got %q Expected %q", i, got, want)
+			}
+		}
 
-// 		if err != nil {
-// 			t.Fatalf("[%d] %q", i, err.Error())
-// 		}
-// 		if got, want := req.Method, tst.method; got != want {
-// 			t.Fatalf("[%d] Got %q Expected %q", i, got, want)
-// 		}
-// 		if got, want := req.URL.String(), oneDrive.BaseURL+tst.uri; got != want {
-// 			t.Fatalf("[%d] Got %q Expected %q", i, got, want)
-// 		}
+		if err != nil {
+			t.Fatalf("[%d] %q", i, err.Error())
+		}
 
-// 		for k, v := range tst.requestHeaders {
-// 			if got, want := req.Header.Get(k), v; got != want {
-// 				t.Fatalf("[%d] Got %q Expected %q", i, got, want)
-// 			}
-// 		}
-// 	}
-// }
+		if got, want := req.Method, tst.method; got != want {
+			t.Fatalf("[%d] Got %q Expected %q", i, got, want)
+		}
+		if got, want := req.URL.String(), oneDrive.BaseURL+tst.uri; got != want {
+			t.Fatalf("[%d] Got %q Expected %q", i, got, want)
+		}
 
-// func TestDoValid(t *testing.T) {
-// 	setup()
-// 	defer teardown()
+		for k, v := range tst.requestHeaders {
+			if got, want := req.Header.Get(k), v; got != want {
+				t.Fatalf("[%d] Got %q Expected %q", i, got, want)
+			}
+		}
+	}
+}
 
-// 	t1 := testStruct1{"a", "b", "c"}
+func TestThrottledRequest(t *testing.T) {
+	setup()
+	defer teardown()
 
-// 	tt := []struct {
-// 		method   string
-// 		uri      string
-// 		into     interface{}
-// 		intoType interface{}
-// 	}{
-// 		{"GET", "/foo", t1, &testStruct1{}},
-// 		{"GET", "/foo", nil, &testStruct1{}},
-// 	}
+	mux.HandleFunc("/drive", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Retry-After", "3600")
+		w.WriteHeader(tooManyRequests)
+		b, err := ioutil.ReadFile("fixtures/request.invalid.tooManyRequests.json")
+		if err != nil {
+			panic(err)
+		}
+		w.Write(b)
+	})
 
-// 	for i, tst := range tt {
-// 		req, err := oneDrive.newRequest(tst.method, tst.uri, nil, tst.into)
-// 		if err != nil {
-// 			t.Fatalf("[%d] %s", i, err.Error())
-// 		}
+	_, _, err := oneDrive.Drives.GetDefault()
+	if err == nil {
+		t.Fatal("Expected tooManyRequests error but none occured")
+	}
 
-// 		resp, err := oneDrive.do(req, &tst.intoType)
-// 		if err != nil {
-// 			t.Fatalf("[%d] %s", i, resp, err.Error())
-// 		}
+	drive, _, err := oneDrive.Drives.GetDefault()
+	if drive != nil {
+		t.Fatalf("Expected no drive to be returned, got %v", *drive)
+	}
 
-// 		fmt.Println(tst.intoType)
-
-// 	}
-
-// }
+}

@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
 )
+
+const tooManyRequests int = 429
 
 func createRequestBody(body interface{}) (io.ReadWriter, error) {
 	var buf io.ReadWriter
@@ -31,7 +34,7 @@ func calculateThrottle(currentTime time.Time, retryAfter string) (time.Time, err
 
 func (od *OneDrive) newRequest(method, uri string, requestHeaders map[string]string, body interface{}) (*http.Request, error) {
 	if !time.Now().After(od.throttle) {
-		return nil, errors.New("your requests are being throttled")
+		return nil, errors.New(fmt.Sprintf("you are making tooMany requests. Please wait: %s", od.throttle.Sub(time.Now())))
 	}
 
 	requestBody, err := createRequestBody(body)
@@ -70,7 +73,7 @@ func (od *OneDrive) do(req *http.Request, decodeInto interface{}) (*http.Respons
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 && resp.StatusCode <= 507 {
-		if resp.StatusCode == 429 {
+		if resp.StatusCode == tooManyRequests {
 			retryAfter, err := calculateThrottle(time.Now(), resp.Header.Get("Retry-After"))
 			if err != nil {
 				return resp, err
