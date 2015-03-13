@@ -124,7 +124,7 @@ func (is *ItemService) ListChildren(itemID string) (*Items, *http.Response, erro
 	}
 
 	items := new(Items)
-	resp, err := is.do(req, nil)
+	resp, err := is.do(req, items)
 	if err != nil {
 		return nil, resp, err
 	}
