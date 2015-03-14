@@ -2,6 +2,7 @@ package onedrive
 
 import (
 	"fmt"
+	"net/http"
 	"reflect"
 	"testing"
 	"time"
@@ -141,6 +142,11 @@ func TestGetItem(t *testing.T) {
 	)
 
 	folderItem := newFolderItem("root", "0123456789abc!101", 10655823, newFolderFacet(3))
+	folderItem.ParentReference = &ItemReference{
+		DriveID: "0123456789abc",
+		ID:      "0123456789abc!104",
+		Path:    "/drive/root:/Test folder 1",
+	}
 
 	imageItem := newImageItem("sydney_opera_house_2011-1920x1080.jpg", "0123456789abc!110", 666657,
 		newImageFacet(1080, 1920),
@@ -172,7 +178,7 @@ func TestGetItem(t *testing.T) {
 		{"video", 200, videoItem},
 	}
 	for i, tst := range tt {
-		mux.HandleFunc(itemURIFromID(tst.itemID), fileWrapperHandler(validFixtureFromItemID(tst.itemID), 200))
+		mux.HandleFunc(itemURIFromID(tst.itemID), fileWrapperHandler(validFixtureFromItemID(tst.itemID), http.StatusOK))
 		item, _, err := oneDrive.Items.Get(tst.itemID)
 		if err != nil {
 			t.Fatalf("Problem fetching the default drive: %s", err.Error())
@@ -187,7 +193,7 @@ func TestGetItemInvalid(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc(itemURIFromID("missing"), fileWrapperHandler("fixtures/request.invalid.notFound.json", 404))
+	mux.HandleFunc(itemURIFromID("missing"), fileWrapperHandler("fixtures/request.invalid.notFound.json", http.StatusNotFound))
 	missingDrive, resp, err := oneDrive.Items.Get("missing")
 	if missingDrive != nil {
 		t.Fatalf("A drive was returned when an error was expected: %v", resp)
@@ -215,7 +221,7 @@ func TestGetDefaultDriveRootFolder(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/drive/root", fileWrapperHandler("fixtures/drive.root.valid.json", 200))
+	mux.HandleFunc("/drive/root", fileWrapperHandler("fixtures/drive.root.valid.json", http.StatusOK))
 	root, _, err := oneDrive.Items.GetDefaultDriveRootFolder()
 	if err != nil {
 		t.Fatalf("Problem fetching the root drive: %s", err.Error())
@@ -242,7 +248,7 @@ func TestListItemChildren(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/drive/items/some-id/children", fileWrapperHandler("fixtures/item.children.valid.json", 200))
+	mux.HandleFunc("/drive/items/some-id/children", fileWrapperHandler("fixtures/item.children.valid.json", http.StatusOK))
 	items, _, err := oneDrive.Items.ListChildren("some-id")
 	if err != nil {
 		t.Fatal(err)
@@ -258,5 +264,31 @@ func TestListItemChildren(t *testing.T) {
 
 	if got, want := items.Collection[1].Name, "Test folder 2"; got != want {
 		t.Fatalf("Got %q Expected %q", got, want)
+	}
+}
+
+func TestListItemChildrenInvalid(t *testing.T) {
+	setup()
+	defer teardown()
+	mux.HandleFunc("/drive/items/some-id/children", fileWrapperHandler("fixtures/item.children.invalid.json", http.StatusOK))
+	_, resp, err := oneDrive.Items.ListChildren("some-id")
+	if err == nil {
+		t.Fatalf("Expected error, got : %v", resp)
+	}
+}
+
+func TestCreateFolder(t *testing.T) {
+	setup()
+	defer teardown()
+
+	folderItem := newFolderItem("root", "0123456789abc!101", 10655823, newFolderFacet(3))
+	mux.HandleFunc("/drive/items/0123456789abc!104/children/root", fileWrapperHandler("fixtures/item.folder.valid.json", http.StatusOK))
+	item, _, err := oneDrive.Items.CreateFolder("0123456789abc!104", "root")
+	if err != nil {
+		t.Fatalf("An error occured while attempting to create a folder: %s", err)
+	}
+
+	if got, want := item, folderItem; reflect.DeepEqual(got, want) {
+		t.Fatalf("Got %v Expected %v", *got, *want)
 	}
 }

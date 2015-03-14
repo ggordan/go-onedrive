@@ -116,9 +116,8 @@ func (is *ItemService) GetDefaultDriveRootFolder() (*Item, *http.Response, error
 
 // ListChildren returns a collection of all the Items under an Item
 func (is *ItemService) ListChildren(itemID string) (*Items, *http.Response, error) {
-	path := fmt.Sprintf("/drive/items/%s/children", itemID)
-
-	req, err := is.newRequest("GET", path, nil, nil)
+	reqURI := fmt.Sprintf("/drive/items/%s/children", itemID)
+	req, err := is.newRequest("GET", reqURI, nil, nil)
 	if err != nil {
 		return nil, nil, err
 	}

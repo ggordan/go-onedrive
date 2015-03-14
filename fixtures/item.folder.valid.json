@@ -19,6 +19,11 @@
       "id": "0123456789abc"
     }
   },
+  "parentReference": {
+    "driveId": "0123456789abc",
+    "id": "0123456789abc!104",
+    "path": "/drive/root:/Test folder 1"
+  },
   "lastModifiedDateTime": "2015-03-09T12:05:17.333Z",
   "name": "root",
   "size": 10655823,
