@@ -112,12 +112,12 @@ func TestGetMissing(t *testing.T) {
 	}
 
 	expectedErr := &Error{
-		InnerError{
+		innerError{
 			Code:    "itemNotFound",
 			Message: "Item Does Not Exist",
-			InnerError: &InnerError{
+			InnerError: &innerError{
 				Code: "itemDoesNotExist",
-				InnerError: &InnerError{
+				InnerError: &innerError{
 					Code: "folderDoesNotExist",
 				},
 			},
@@ -185,10 +185,10 @@ func TestListAllDrivesInvalid(t *testing.T) {
 	}
 
 	expectedErr := &Error{
-		InnerError{
+		innerError{
 			Code:    "invalidArgument",
 			Message: "Bad Argument",
-			InnerError: &InnerError{
+			InnerError: &innerError{
 				Code: "badArgument",
 			},
 		},
