@@ -93,7 +93,7 @@ func TestThrottledRequest(t *testing.T) {
 
 	mux.HandleFunc("/drive", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Retry-After", "3600")
-		w.WriteHeader(tooManyRequests)
+		w.WriteHeader(statusTooManyRequests)
 		b, err := ioutil.ReadFile("fixtures/request.invalid.tooManyRequests.json")
 		if err != nil {
 			panic(err)

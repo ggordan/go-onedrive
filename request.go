@@ -10,7 +10,10 @@ import (
 	"time"
 )
 
-const tooManyRequests int = 429
+const (
+	statusTooManyRequests     int = 429
+	statusInsufficientStorage int = 507
+)
 
 func createRequestBody(body interface{}) (io.ReadWriter, error) {
 	var buf io.ReadWriter
@@ -72,8 +75,8 @@ func (od *OneDrive) do(req *http.Request, decodeInto interface{}) (*http.Respons
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 && resp.StatusCode <= 507 {
-		if resp.StatusCode == tooManyRequests {
+	if resp.StatusCode >= http.StatusBadRequest && resp.StatusCode <= statusInsufficientStorage {
+		if resp.StatusCode == statusTooManyRequests {
 			retryAfter, err := calculateThrottle(time.Now(), resp.Header.Get("Retry-After"))
 			if err != nil {
 				return resp, err
