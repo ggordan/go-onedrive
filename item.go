@@ -178,7 +178,7 @@ func (is *ItemService) UploadFromURL(parentID, name, webURL string) (*Item, *htt
 	}
 
 	path := fmt.Sprintf("/drive/items/%s/children", parentID)
-	req, err := is.newRequest("PUT", path, requestHeaders, newFile)
+	req, err := is.newRequest("POST", path, requestHeaders, newFile)
 	if err != nil {
 		return nil, nil, err
 	}
