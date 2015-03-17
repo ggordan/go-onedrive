@@ -191,3 +191,27 @@ func (is *ItemService) UploadFromURL(parentID, name, webURL string) (*Item, *htt
 
 	return item, resp, nil
 }
+
+// Delete removed a OneDrive item by using its ID. Note that deleting items
+// using this method will move the items to the Recycle Bin, instead of
+// permanently deleting them.
+// See: http://onedrive.github.io/items/delete.htm
+func (is *ItemService) Delete(itemID, eTag string) (bool, *http.Response, error) {
+	requestHeaders := make(map[string]string)
+	if eTag != "" {
+		requestHeaders["if-match"] = eTag
+	}
+
+	path := fmt.Sprintf("/drive/items/%s", itemID)
+	req, err := is.newRequest("DELETE", path, requestHeaders, nil)
+	if err != nil {
+		return false, nil, err
+	}
+
+	resp, err := is.do(req, nil)
+	if err != nil {
+		return false, resp, err
+	}
+
+	return (resp.StatusCode == statusNoContent), resp, err
+}

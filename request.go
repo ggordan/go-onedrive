@@ -13,6 +13,7 @@ import (
 const (
 	statusTooManyRequests     int = 429
 	statusInsufficientStorage int = 507
+	statusNoContent           int = 204
 )
 
 func createRequestBody(body interface{}) (io.ReadWriter, error) {
