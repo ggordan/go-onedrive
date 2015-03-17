@@ -18,12 +18,12 @@ func newHashesFacet(sha1, crc string) *HashesFacet {
 // It is available on the file property of Item resources that represent files.
 // See: http://onedrive.github.io/facets/file_facet.htm
 type FileFacet struct {
-	MimeType string       `json:"mimeType"`
-	Hashes   *HashesFacet `json:"hashes"`
+	MimeType *string      `json:"mimeType,omitempty"`
+	Hashes   *HashesFacet `json:"hashes,omitempty"`
 }
 
 func newFileFacet(mime string, hashes *HashesFacet) *FileFacet {
-	return &FileFacet{mime, hashes}
+	return &FileFacet{&mime, hashes}
 }
 
 // The FolderFacet groups folder-related data on OneDrive into a single
