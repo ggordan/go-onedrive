@@ -192,6 +192,28 @@ func (is *ItemService) UploadFromURL(parentID, name, webURL string) (*Item, *htt
 	return item, resp, nil
 }
 
+// Move changes the parent folder for a OneDrive Item resource.
+// See: http://onedrive.github.io/items/move.htm
+func (is ItemService) Update(item *Item, ifMatch bool) (*Item, *http.Response, error) {
+	requestHeaders := make(map[string]string)
+	if ifMatch {
+		requestHeaders["if-match"] = item.ETag
+	}
+
+	path := fmt.Sprintf("/drive/items/%s", item.ID)
+	req, err := is.newRequest("PATCH", path, requestHeaders, item)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := is.do(req, item)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return item, resp, nil
+}
+
 // Delete removed a OneDrive item by using its ID. Note that deleting items
 // using this method will move the items to the Recycle Bin, instead of
 // permanently deleting them.
@@ -214,4 +236,45 @@ func (is *ItemService) Delete(itemID, eTag string) (bool, *http.Response, error)
 	}
 
 	return (resp.StatusCode == statusNoContent), resp, err
+}
+
+// Move changes the parent folder for a OneDrive Item resource.
+// See: http://onedrive.github.io/items/move.htm
+func (is ItemService) Move(itemID, parentReference ItemReference) (*Item, *http.Response, error) {
+	path := fmt.Sprintf("/drive/items/%s", itemID)
+	req, err := is.newRequest("PATCH", path, nil, parentReference)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	item := new(Item)
+	resp, err := is.do(req, item)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return item, resp, nil
+}
+
+// Move changes the parent folder for a OneDrive Item resource.
+// See: http://onedrive.github.io/items/move.htm
+func (is ItemService) Copy(itemID, name string, parentReference ItemReference) (*Item, *http.Response, error) {
+	copyAction := struct {
+		ParentReference *ItemReference `json:"parentReference"`
+		Name            string         `json:"name,omitempty"`
+	}{&parentReference, name}
+
+	path := fmt.Sprintf("/drive/items/%s/action.copy", itemID)
+	req, err := is.newRequest("POST", path, nil, copyAction)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	item := new(Item)
+	resp, err := is.do(req, item)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return item, resp, nil
 }
