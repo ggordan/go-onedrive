@@ -292,3 +292,8 @@ func TestCreateFolder(t *testing.T) {
 		t.Fatalf("Got %v Expected %v", *got, *want)
 	}
 }
+
+func TestDeleteItem(t *testing.T) {
+	setup()
+	defer teardown()
+}
