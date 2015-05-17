@@ -264,8 +264,11 @@ func (is ItemService) Copy(itemID, name string, parentReference ItemReference) (
 		Name            string         `json:"name,omitempty"`
 	}{&parentReference, name}
 
+	// The copy action requires a Prefer: respond-async header
+	headers := map[string]string{"Prefer": "respond-async"}
+
 	path := fmt.Sprintf("/drive/items/%s/action.copy", itemID)
-	req, err := is.newRequest("POST", path, nil, copyAction)
+	req, err := is.newRequest("POST", path, headers, copyAction)
 	if err != nil {
 		return nil, nil, err
 	}
