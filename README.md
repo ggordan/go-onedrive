@@ -19,20 +19,20 @@ Get an access token via the [token flow](http://onedrive.github.io/auth/msa_oaut
  - [x] List all available drives
 - [ ] Items
  - [ ] Create
-  - [x] Create folder
-  - [ ] Multipart item upload
+ 	- [x] Create folder
+ 	- [ ] Multipart item upload
  - [ ] Copy
  	- [x] Copy file/folder
-  - [ ] Async job to track progress
+ 	- [ ] Async job to track progress
  - [x] Delete
  - [ ] Download
  - [x] List children
  - [ ] Search
  - [x] Move
  - [ ] Upload
-  - [ ] Simple item upload <100MB
-  - [ ] Resumable item upload
-  - [ ] Upload from URL
+ 	- [ ] Simple item upload <100MB
+ 	- [ ] Resumable item upload
+ 	- [ ] Upload from URL
  - [ ] Delete
 
 # License
