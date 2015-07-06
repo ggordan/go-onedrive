@@ -1,5 +1,13 @@
 package onedrive
 
+import "errors"
+
+// error types
+
+var (
+	ErrFileTooLarge = errors.New("file is too large for simple upload")
+)
+
 type innerError struct {
 	Code       string      `json:"code"`
 	Message    string      `json:"message"`
