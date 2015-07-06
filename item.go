@@ -164,34 +164,6 @@ type newWebUpload struct {
 	File      *FileFacet `json:"file"`
 }
 
-// UploadFromURL allows your app to upload an item to OneDrive by providing a URL.
-// OneDrive will download the file directly from a remote server so your app
-// doesn't have to upload the file's bytes.
-// See: http://onedrive.github.io/items/upload_url.htm
-func (is *ItemService) UploadFromURL(parentID, name, webURL string) (*Item, *http.Response, error) {
-	requestHeaders := map[string]string{
-		"Prefer": "respond-async",
-	}
-
-	newFile := newWebUpload{
-		webURL, name, new(FileFacet),
-	}
-
-	path := fmt.Sprintf("/drive/items/%s/children", parentID)
-	req, err := is.newRequest("POST", path, requestHeaders, newFile)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	item := new(Item)
-	resp, err := is.do(req, item)
-	if err != nil {
-		return nil, resp, err
-	}
-
-	return item, resp, nil
-}
-
 // Move changes the parent folder for a OneDrive Item resource.
 // See: http://onedrive.github.io/items/move.htm
 func (is ItemService) Update(item *Item, ifMatch bool) (*Item, *http.Response, error) {
