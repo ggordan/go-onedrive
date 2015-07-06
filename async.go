@@ -1,5 +1,7 @@
 package onedrive
 
+// AsyncJob stores the location (URL) which can be pinged with CheckStatus() to
+// check progress of an Async job.
 type AsyncJob struct {
 	*OneDrive
 	Location string
@@ -12,6 +14,7 @@ type AsyncJobStatus struct {
 	Status             string  `json:"status"`
 }
 
+// CheckStatus returns a new AsyncJobStatus
 func (aj AsyncJob) CheckStatus() (*AsyncJobStatus, error) {
 	req, err := aj.newRequest("GET", aj.Location, nil, nil)
 	if err != nil {
