@@ -120,7 +120,8 @@ func (ds *DriveService) ListAll() (*Drives, *http.Response, error) {
 	return drives, resp, nil
 }
 
-// ListChildren returns a collection of all the Items under the Drive root.
+// ListChildren returns a collection of all the Items under the Drive root. If no
+// driveID is specified, the children from the root drive are retrieved.
 func (ds *DriveService) ListChildren(driveID string) (*Items, *http.Response, error) {
 	req, err := ds.newRequest("GET", driveChildrenURIFromID(driveID), nil, nil)
 	if err != nil {
