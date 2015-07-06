@@ -36,7 +36,9 @@ func (is *ItemService) UploadFromURL(parentID, name, webURL string) (*Item, *htt
 	return item, resp, nil
 }
 
-// SimpleUpload uploads a small file < 100MB to te
+// SimpleUpload allows you to provide the contents of a new file or update the
+// contents of an existing file in a single API call. This method only supports
+// files up to 100MB in size. For larger files use ResumableUpload().
 // See: https://dev.onedrive.com/items/upload_put.htm
 func (is ItemService) SimpleUpload(folderID string, file *os.File) (*Item, *http.Response, error) {
 	fileInfo, err := file.Stat()
@@ -55,10 +57,11 @@ func (is ItemService) SimpleUpload(folderID string, file *os.File) (*Item, *http
 		return nil, nil, err
 	}
 
-	resp, err := is.do(req, nil)
+	item := new(Item)
+	resp, err := is.do(req, item)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return nil, nil, nil
+	return item, resp, nil
 }
