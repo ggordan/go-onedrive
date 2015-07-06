@@ -31,8 +31,7 @@ Get an access token via the [token flow](http://onedrive.github.io/auth/msa_oaut
  - [ ] Upload
  	- [x] Simple item upload <100MB
  	- [ ] Resumable item upload
- 	- [ ] Upload from URL
- - [ ] Delete
+ 	- [x] Upload from URL
 
 # License
 
