@@ -16,12 +16,13 @@ const (
 type OneDrive struct {
 	Client *http.Client
 	// When debug is set to true, the JSON response is formatted for better readability
-	Debug    bool
-	BaseURL  string
-	throttle time.Time
+	Debug   bool
+	BaseURL string
 	// Services
 	Drives *DriveService
 	Items  *ItemService
+	// Private
+	throttle time.Time
 }
 
 // NewOneDrive returns a new OneDrive client to enable you to communicate with
