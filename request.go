@@ -41,10 +41,17 @@ func (od *OneDrive) newRequest(method, uri string, requestHeaders map[string]str
 		return nil, errors.New(fmt.Sprintf("you are making too many requests. Please wait: %s", od.throttle.Sub(time.Now())))
 	}
 
-	requestBody, err := createRequestBody(body)
-	if err != nil {
-		return nil, err
-	}
+	var requestBody io.Reader
+
+	switch b := body.(type) {
+	  case io.Reader:
+	    requestBody = b
+	  default:
+	    var err error
+	    if requestBody, err = createRequestBody(b); err != nil {
+	      return nil, err
+	    }
+	  }
 
 	req, err := http.NewRequest(method, od.BaseURL+uri, requestBody)
 	if err != nil {
